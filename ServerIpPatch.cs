@@ -7,21 +7,21 @@ namespace AutoClientSelector;
 internal readonly struct IpEditorState
 {
     internal readonly Server Server;
-    internal readonly string PreviousIp;
 
     internal IpEditorState(SetIP editor)
     {
         Server = editor?.server;
-        PreviousIp = Server?.IP ?? string.Empty;
     }
 }
 
 internal static class ClientSelector
 {
-    internal static void AfterIpEditorAction(IpEditorState state)
+    internal static void AfterIpEditorAction(
+        SetIP editor,
+        IpEditorState state)
     {
         var server = state.Server;
-        if (server is null)
+        if (server is null || editor is null || editor.isActive)
             return;
 
         try
@@ -34,12 +34,6 @@ internal static class ClientSelector
                 ClearClient(server);
                 return;
             }
-
-            if (string.Equals(
-                    state.PreviousIp,
-                    server.IP,
-                    StringComparison.Ordinal))
-                return;
 
             SelectMatchingClient(server);
         }
@@ -57,16 +51,16 @@ internal static class ClientSelector
         if (previousClientId == -1)
         {
             Melon<Mod>.Logger.Msg(
-                $"Server {server.ServerID} IP 0.0.0.0: no client was " +
-                "assigned; no change was needed.");
+                $"Server {server.ServerID}: no client was assigned for " +
+                "0.0.0.0; current client -1 was left unchanged.");
             return;
         }
 
         server.UpdateCustomer(-1);
         CoopWorldSync.SyncServerCustomer(server.ServerID, -1);
         Melon<Mod>.Logger.Msg(
-            $"Server {server.ServerID} IP 0.0.0.0: cleared client " +
-            $"{previousClientId}.");
+            $"Server {server.ServerID}: cleared client {previousClientId} " +
+            "for 0.0.0.0.");
     }
 
     private static void SelectMatchingClient(Server server)
@@ -74,50 +68,53 @@ internal static class ClientSelector
         if (server is null || string.IsNullOrWhiteSpace(server.IP))
             return;
 
-        int? matchingClientId = null;
+        var matchingClientIds = new HashSet<int>();
         foreach (var customerBase in
                  UnityEngine.Object.FindObjectsOfType<CustomerBase>())
         {
             if (customerBase is null || !customerBase.IsIPPresent(server.IP))
                 continue;
-
-            var clientId = customerBase.customerID;
-            if (matchingClientId.HasValue && matchingClientId.Value != clientId)
-            {
-                Melon<Mod>.Logger.Warning(
-                    $"Server {server.ServerID} IP {server.IP} matches multiple " +
-                    "clients; the current client was left unchanged.");
-                return;
-            }
-
-            matchingClientId = clientId;
+            matchingClientIds.Add(customerBase.customerID);
         }
 
-        if (!matchingClientId.HasValue)
+        var currentClientId = server.GetCustomerID();
+        if (matchingClientIds.Count == 0)
         {
             Melon<Mod>.Logger.Msg(
-                $"Server {server.ServerID} IP {server.IP}: no matching client " +
-                "was found; the current client was left unchanged.");
+                $"Server {server.ServerID}: no matching client was found for " +
+                $"{server.IP}; current client {currentClientId} was left " +
+                "unchanged.");
             return;
         }
 
-        if (matchingClientId.Value == server.GetCustomerID())
+        if (matchingClientIds.Count > 1)
         {
-            Melon<Mod>.Logger.Msg(
-                $"Server {server.ServerID} IP {server.IP}: client " +
-                $"{matchingClientId.Value} was already selected; no change " +
-                "was needed.");
+            var matches = string.Join(
+                ", ",
+                matchingClientIds.OrderBy(clientId => clientId));
+            Melon<Mod>.Logger.Warning(
+                $"Server {server.ServerID}: multiple clients [{matches}] " +
+                $"matched {server.IP}; current client {currentClientId} was " +
+                "left unchanged.");
             return;
         }
 
-        var previousClientId = server.GetCustomerID();
-        server.UpdateCustomer(matchingClientId.Value);
+        var matchingClientId = matchingClientIds.Single();
+        if (matchingClientId == currentClientId)
+        {
+            Melon<Mod>.Logger.Msg(
+                $"Server {server.ServerID}: client {matchingClientId} was " +
+                $"already selected for {server.IP}.");
+            return;
+        }
+
+        server.UpdateCustomer(matchingClientId);
         CoopWorldSync.SyncServerCustomer(
             server.ServerID,
-            matchingClientId.Value);
+            matchingClientId);
         Melon<Mod>.Logger.Msg(
-            $"Server {server.ServerID} IP {server.IP}: changed client from " +
-            $"{previousClientId} to {matchingClientId.Value}.");
+            $"Server {server.ServerID}: changed client from {currentClientId} " +
+            $"to {matchingClientId} for {server.IP}.");
     }
 }
 
@@ -129,8 +126,8 @@ internal static class ConfirmIpPatch
         __state = new IpEditorState(__instance);
     }
 
-    private static void Postfix(IpEditorState __state)
+    private static void Postfix(SetIP __instance, IpEditorState __state)
     {
-        ClientSelector.AfterIpEditorAction(__state);
+        ClientSelector.AfterIpEditorAction(__instance, __state);
     }
 }

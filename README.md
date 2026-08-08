@@ -9,6 +9,8 @@ unique client matches, the mod updates the server to that client. If no client
 or multiple clients match, the existing client remains unchanged.
 
 Confirming `0.0.0.0` clears the current client assignment and client logo.
+Confirming an unchanged valid IP deliberately runs the selection again. An IP
+rejected by the game's editor does not trigger selection.
 
 Indirect chains through multiple custom subnets are outside the supported V1
 scope.

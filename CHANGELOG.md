@@ -16,6 +16,10 @@ All notable changes to Auto Client Selector are documented in this file.
   client, changed the client, or matched multiple clients.
 - Keep match-result messages factual without claiming which network mechanism
   produced the match.
+- Recheck every IP accepted with the editor's OK button, including unchanged
+  valid IPs, while ignoring rejected confirmations.
+- Include the current client ID in no-change logs and list all unique client
+  IDs when multiple clients match.
 
 ### Fixed
 

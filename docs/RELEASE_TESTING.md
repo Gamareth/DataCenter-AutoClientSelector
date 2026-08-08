@@ -29,12 +29,17 @@ with the exact DLL intended for publication.
 - [ ] Loading an existing save does not unexpectedly change server clients.
 - [ ] No automatic client-change messages appear while servers are reconstructed.
 - [ ] Confirming an edited IP with the OK button triggers matching.
+- [ ] Confirming an unchanged valid IP with the OK button triggers matching.
+- [ ] A rejected invalid or duplicate IP leaves the editor open and does not
+      produce a match-result log.
 - [ ] Using Next IP without confirming does not trigger matching.
 - [ ] Confirming `0.0.0.0` clears an assigned client and its logo.
 - [ ] Confirming `0.0.0.0` on an unassigned server causes no warning or error.
 - [ ] A changed IP with no match logs that the current client was unchanged.
 - [ ] A unique match logs whether the client changed or was already selected.
 - [ ] Match logs do not claim which network mechanism produced the match.
+- [ ] A multiple-match log lists every unique matching client ID once in
+      ascending order and includes the unchanged current client ID.
 - [ ] Manual previous/next client controls still work.
 - [ ] Saving a new IP still performs the game's duplicate-IP validation.
 - [ ] The selected client persists after saving and reloading.
