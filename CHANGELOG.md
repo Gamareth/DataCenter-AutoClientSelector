@@ -14,6 +14,8 @@ All notable changes to Auto Client Selector are documented in this file.
 - Clear the client assignment when `0.0.0.0` is confirmed in the IP editor.
 - Log whether a confirmed IP found no client, matched the already selected
   client, changed the client, or matched multiple clients.
+- Keep match-result messages factual without claiming which network mechanism
+  produced the match.
 
 ### Fixed
 

@@ -55,7 +55,12 @@ internal static class ClientSelector
     {
         var previousClientId = server.GetCustomerID();
         if (previousClientId == -1)
+        {
+            Melon<Mod>.Logger.Msg(
+                $"Server {server.ServerID} IP 0.0.0.0: no client was " +
+                "assigned; no change was needed.");
             return;
+        }
 
         server.UpdateCustomer(-1);
         CoopWorldSync.SyncServerCustomer(server.ServerID, -1);
@@ -100,8 +105,8 @@ internal static class ClientSelector
         {
             Melon<Mod>.Logger.Msg(
                 $"Server {server.ServerID} IP {server.IP}: client " +
-                $"{matchingClientId.Value} was already selected; matched " +
-                "through a client subnet or directly routed custom subnet.");
+                $"{matchingClientId.Value} was already selected; no change " +
+                "was needed.");
             return;
         }
 
@@ -112,8 +117,7 @@ internal static class ClientSelector
             matchingClientId.Value);
         Melon<Mod>.Logger.Msg(
             $"Server {server.ServerID} IP {server.IP}: changed client from " +
-            $"{previousClientId} to {matchingClientId.Value}; matched through " +
-            "a client subnet or directly routed custom subnet.");
+            $"{previousClientId} to {matchingClientId.Value}.");
     }
 }
 

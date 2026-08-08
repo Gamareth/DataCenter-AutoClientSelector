@@ -34,8 +34,7 @@ with the exact DLL intended for publication.
 - [ ] Confirming `0.0.0.0` on an unassigned server causes no warning or error.
 - [ ] A changed IP with no match logs that the current client was unchanged.
 - [ ] A unique match logs whether the client changed or was already selected.
-- [ ] Match logs describe the source as a client subnet or directly routed
-      custom subnet without claiming an unverified exact route type.
+- [ ] Match logs do not claim which network mechanism produced the match.
 - [ ] Manual previous/next client controls still work.
 - [ ] Saving a new IP still performs the game's duplicate-IP validation.
 - [ ] The selected client persists after saving and reloading.
