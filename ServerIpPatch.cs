@@ -21,15 +21,26 @@ internal static class ClientSelector
     internal static void AfterIpEditorAction(IpEditorState state)
     {
         var server = state.Server;
-        if (server is null ||
-            string.Equals(
-                state.PreviousIp,
-                server.IP,
-                StringComparison.Ordinal))
+        if (server is null)
             return;
 
         try
         {
+            if (string.Equals(
+                    server.IP,
+                    "0.0.0.0",
+                    StringComparison.Ordinal))
+            {
+                ClearClient(server);
+                return;
+            }
+
+            if (string.Equals(
+                    state.PreviousIp,
+                    server.IP,
+                    StringComparison.Ordinal))
+                return;
+
             SelectMatchingClient(server);
         }
         catch (Exception exception)
@@ -38,6 +49,19 @@ internal static class ClientSelector
                 "Could not select a client after the server IP changed. " +
                 $"{exception.GetType().Name}: {exception.Message}");
         }
+    }
+
+    private static void ClearClient(Server server)
+    {
+        var previousClientId = server.GetCustomerID();
+        if (previousClientId == -1)
+            return;
+
+        server.UpdateCustomer(-1);
+        CoopWorldSync.SyncServerCustomer(server.ServerID, -1);
+        Melon<Mod>.Logger.Msg(
+            $"Server {server.ServerID} IP 0.0.0.0: cleared client " +
+            $"{previousClientId}.");
     }
 
     private static void SelectMatchingClient(Server server)

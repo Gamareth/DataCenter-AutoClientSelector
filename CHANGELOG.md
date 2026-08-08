@@ -11,6 +11,7 @@ All notable changes to Auto Client Selector are documented in this file.
   to a client subnet by using the game's customer-base network registration.
 - Leave the current client unchanged when no client or multiple clients match.
 - Synchronize an automatic client change through the game's co-op sync API.
+- Clear the client assignment when `0.0.0.0` is confirmed in the IP editor.
 
 ### Fixed
 

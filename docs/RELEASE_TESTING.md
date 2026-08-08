@@ -30,6 +30,8 @@ with the exact DLL intended for publication.
 - [ ] No automatic client-change messages appear while servers are reconstructed.
 - [ ] Confirming an edited IP with the OK button triggers matching.
 - [ ] Using Next IP without confirming does not trigger matching.
+- [ ] Confirming `0.0.0.0` clears an assigned client and its logo.
+- [ ] Confirming `0.0.0.0` on an unassigned server causes no warning or error.
 - [ ] Manual previous/next client controls still work.
 - [ ] Saving a new IP still performs the game's duplicate-IP validation.
 - [ ] The selected client persists after saving and reloading.

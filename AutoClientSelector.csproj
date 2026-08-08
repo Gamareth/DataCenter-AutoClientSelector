@@ -5,9 +5,9 @@
     <Nullable>disable</Nullable>
     <AssemblyName>AutoClientSelector</AssemblyName>
     <RootNamespace>AutoClientSelector</RootNamespace>
-    <Version>0.1.2</Version>
-    <AssemblyVersion>0.1.2.0</AssemblyVersion>
-    <FileVersion>0.1.2.0</FileVersion>
+    <Version>0.1.3</Version>
+    <AssemblyVersion>0.1.3.0</AssemblyVersion>
+    <FileVersion>0.1.3.0</FileVersion>
     <PlatformTarget>x64</PlatformTarget>
     <DataCenterGamePath Condition="'$(DataCenterGamePath)' == ''">$(DATA_CENTER_GAME_PATH)</DataCenterGamePath>
     <MelonLoaderManagedPath>$(DataCenterGamePath)\MelonLoader\net6</MelonLoaderManagedPath>
