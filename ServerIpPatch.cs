@@ -4,17 +4,33 @@ using MelonLoader;
 
 namespace AutoClientSelector;
 
-[HarmonyPatch(typeof(Server), nameof(Server.SetIP))]
-internal static class ServerIpPatch
+internal readonly struct IpEditorState
 {
-    private static void Postfix(Server __instance)
+    internal readonly Server Server;
+    internal readonly string PreviousIp;
+
+    internal IpEditorState(SetIP editor)
     {
-        if (!GameLoadState.IsReady)
+        Server = editor?.server;
+        PreviousIp = Server?.IP ?? string.Empty;
+    }
+}
+
+internal static class ClientSelector
+{
+    internal static void AfterIpEditorAction(IpEditorState state)
+    {
+        var server = state.Server;
+        if (server is null ||
+            string.Equals(
+                state.PreviousIp,
+                server.IP,
+                StringComparison.Ordinal))
             return;
 
         try
         {
-            SelectMatchingClient(__instance);
+            SelectMatchingClient(server);
         }
         catch (Exception exception)
         {
@@ -60,5 +76,19 @@ internal static class ServerIpPatch
         Melon<Mod>.Logger.Msg(
             $"Server {server.ServerID} IP {server.IP}: changed client from " +
             $"{previousClientId} to {matchingClientId.Value}.");
+    }
+}
+
+[HarmonyPatch(typeof(SetIP), nameof(SetIP.ClickButtonOK))]
+internal static class ConfirmIpPatch
+{
+    private static void Prefix(SetIP __instance, out IpEditorState __state)
+    {
+        __state = new IpEditorState(__instance);
+    }
+
+    private static void Postfix(IpEditorState __state)
+    {
+        ClientSelector.AfterIpEditorAction(__state);
     }
 }

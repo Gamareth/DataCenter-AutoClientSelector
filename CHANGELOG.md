@@ -16,3 +16,6 @@ All notable changes to Auto Client Selector are documented in this file.
 
 - Keep automatic selection disabled while a save is loading, preventing server
   reconstruction from triggering client changes before the game is ready.
+- Trigger selection from the confirmed IP-editor OK action instead of `Server.SetIP`,
+  because server reconstruction continues after the game's nominal load-later
+  event.
