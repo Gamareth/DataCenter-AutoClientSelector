@@ -2,7 +2,7 @@
 
 All notable changes to Auto Client Selector are documented in this file.
 
-## [Unreleased]
+## [0.1.6-rc.1] - 2026-08-08
 
 ### Added
 
@@ -23,8 +23,5 @@ All notable changes to Auto Client Selector are documented in this file.
 
 ### Fixed
 
-- Keep automatic selection disabled while a save is loading, preventing server
-  reconstruction from triggering client changes before the game is ready.
-- Trigger selection from the confirmed IP-editor OK action instead of `Server.SetIP`,
-  because server reconstruction continues after the game's nominal load-later
-  event.
+- Trigger selection only from the confirmed IP-editor OK action instead of
+  `Server.SetIP`, preventing save reconstruction from invoking the mod.
