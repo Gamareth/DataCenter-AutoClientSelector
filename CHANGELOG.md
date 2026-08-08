@@ -12,6 +12,8 @@ All notable changes to Auto Client Selector are documented in this file.
 - Leave the current client unchanged when no client or multiple clients match.
 - Synchronize an automatic client change through the game's co-op sync API.
 - Clear the client assignment when `0.0.0.0` is confirmed in the IP editor.
+- Log whether a confirmed IP found no client, matched the already selected
+  client, changed the client, or matched multiple clients.
 
 ### Fixed
 

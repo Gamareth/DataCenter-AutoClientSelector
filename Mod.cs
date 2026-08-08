@@ -12,7 +12,7 @@ namespace AutoClientSelector;
 public sealed class Mod : MelonMod
 {
     internal const string DisplayName = "Auto Client Selector";
-    internal const string Version = "0.1.3";
+    internal const string Version = "0.1.4";
     internal const string Author = "Gamareth";
 
     public override void OnInitializeMelon()

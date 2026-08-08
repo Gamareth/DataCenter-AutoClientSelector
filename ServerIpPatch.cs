@@ -88,9 +88,22 @@ internal static class ClientSelector
             matchingClientId = clientId;
         }
 
-        if (!matchingClientId.HasValue ||
-            matchingClientId.Value == server.GetCustomerID())
+        if (!matchingClientId.HasValue)
+        {
+            Melon<Mod>.Logger.Msg(
+                $"Server {server.ServerID} IP {server.IP}: no matching client " +
+                "was found; the current client was left unchanged.");
             return;
+        }
+
+        if (matchingClientId.Value == server.GetCustomerID())
+        {
+            Melon<Mod>.Logger.Msg(
+                $"Server {server.ServerID} IP {server.IP}: client " +
+                $"{matchingClientId.Value} was already selected; matched " +
+                "through a client subnet or directly routed custom subnet.");
+            return;
+        }
 
         var previousClientId = server.GetCustomerID();
         server.UpdateCustomer(matchingClientId.Value);
@@ -99,7 +112,8 @@ internal static class ClientSelector
             matchingClientId.Value);
         Melon<Mod>.Logger.Msg(
             $"Server {server.ServerID} IP {server.IP}: changed client from " +
-            $"{previousClientId} to {matchingClientId.Value}.");
+            $"{previousClientId} to {matchingClientId.Value}; matched through " +
+            "a client subnet or directly routed custom subnet.");
     }
 }
 
