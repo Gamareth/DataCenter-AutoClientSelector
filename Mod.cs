@@ -12,13 +12,14 @@ namespace AutoClientSelector;
 public sealed class Mod : MelonMod
 {
     internal const string DisplayName = "Auto Client Selector";
-    internal const string Version = "0.1.0";
+    internal const string Version = "0.1.1";
     internal const string Author = "Gamareth";
 
     public override void OnInitializeMelon()
     {
+        GameLoadState.Initialize();
         LoggerInstance.Msg(
             $"{DisplayName} {Version} initialized. " +
-            "A unique matching client is selected after a server IP changes.");
+            "Automatic selection remains suspended until save loading completes.");
     }
 }

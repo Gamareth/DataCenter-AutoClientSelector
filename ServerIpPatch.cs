@@ -9,6 +9,9 @@ internal static class ServerIpPatch
 {
     private static void Postfix(Server __instance)
     {
+        if (!GameLoadState.IsReady)
+            return;
+
         try
         {
             SelectMatchingClient(__instance);

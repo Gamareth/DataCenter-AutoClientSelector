@@ -9,6 +9,8 @@ with the exact DLL intended for publication.
 - [ ] Only one copy of `AutoClientSelector.dll` is present in `Mods`.
 - [ ] The MelonLoader log reports `Auto Client Selector` with the expected
       version and no patching errors.
+- [ ] The log reports that automatic selection is suspended when save loading
+      starts and active only after save loading completes.
 
 ## Required matching scenarios
 
@@ -26,6 +28,8 @@ with the exact DLL intended for publication.
 ## Regression checks
 
 - [ ] Loading an existing save does not unexpectedly change server clients.
+- [ ] No automatic client-change messages appear between the load-started and
+      load-completed messages.
 - [ ] Manual previous/next client controls still work.
 - [ ] Saving a new IP still performs the game's duplicate-IP validation.
 - [ ] The selected client persists after saving and reloading.
