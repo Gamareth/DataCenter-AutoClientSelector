@@ -5,23 +5,43 @@
     <Nullable>disable</Nullable>
     <AssemblyName>AutoClientSelector</AssemblyName>
     <RootNamespace>AutoClientSelector</RootNamespace>
-    <Version>0.1.6</Version>
-    <AssemblyVersion>0.1.6.0</AssemblyVersion>
-    <FileVersion>0.1.6.0</FileVersion>
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
     <PlatformTarget>x64</PlatformTarget>
     <DataCenterGamePath Condition="'$(DataCenterGamePath)' == ''">$(DATA_CENTER_GAME_PATH)</DataCenterGamePath>
     <MelonLoaderManagedPath>$(DataCenterGamePath)\MelonLoader\net6</MelonLoaderManagedPath>
     <Il2CppAssemblyPath>$(DataCenterGamePath)\MelonLoader\Il2CppAssemblies</Il2CppAssemblyPath>
+    <UpdaterPublishDirectory>$(MSBuildProjectDirectory)\obj\$(Configuration)\EmbeddedUpdater\</UpdaterPublishDirectory>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Updater\**\*.cs" />
+    <Compile Remove="Tests\**\*.cs" />
     <Reference Include="MelonLoader"><HintPath>$(MelonLoaderManagedPath)\MelonLoader.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="0Harmony"><HintPath>$(MelonLoaderManagedPath)\0Harmony.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="Il2CppInterop.Runtime"><HintPath>$(MelonLoaderManagedPath)\Il2CppInterop.Runtime.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="Assembly-CSharp"><HintPath>$(Il2CppAssemblyPath)\Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.CoreModule"><HintPath>$(Il2CppAssemblyPath)\UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="Il2Cppmscorlib"><HintPath>$(Il2CppAssemblyPath)\Il2Cppmscorlib.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Il2Cppcom.rlabrecque.steamworks.net"><HintPath>$(Il2CppAssemblyPath)\Il2Cppcom.rlabrecque.steamworks.net.dll</HintPath><Private>false</Private></Reference>
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="Updater\AutoClientSelector.Updater.csproj" ReferenceOutputAssembly="false" />
+    <EmbeddedResource Include="$(UpdaterPublishDirectory)AutoClientSelector.Updater.dll" LogicalName="AutoClientSelector.Updater.dll" />
+    <EmbeddedResource Include="$(UpdaterPublishDirectory)AutoClientSelector.Updater.deps.json" LogicalName="AutoClientSelector.Updater.deps.json" />
+    <EmbeddedResource Include="$(UpdaterPublishDirectory)AutoClientSelector.Updater.runtimeconfig.json" LogicalName="AutoClientSelector.Updater.runtimeconfig.json" />
+  </ItemGroup>
+
+  <Target Name="PublishEmbeddedUpdater" BeforeTargets="PrepareResources">
+    <RemoveDir Directories="$(UpdaterPublishDirectory)" />
+    <MSBuild
+      Projects="Updater\AutoClientSelector.Updater.csproj"
+      Targets="Publish"
+      BuildInParallel="false"
+      Properties="Configuration=$(Configuration);SelfContained=false;UseAppHost=false;PublishSingleFile=false;DebugType=None;DebugSymbols=false;PublishDir=$(UpdaterPublishDirectory)" />
+  </Target>
 
   <Target Name="ValidateDataCenterGamePath" BeforeTargets="ResolveReferences">
     <Error Condition="'$(DataCenterGamePath)' == ''" Text="Set DATA_CENTER_GAME_PATH or pass /p:DataCenterGamePath=... to the build." />

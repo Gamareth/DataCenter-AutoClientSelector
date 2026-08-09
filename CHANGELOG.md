@@ -2,6 +2,28 @@
 
 All notable changes to Auto Client Selector are documented in this file.
 
+## [1.0.0] - 2026-08-09
+
+### Added
+
+- Add verified automatic Steam Workshop updates after the initial manual
+  installation.
+- Validate Workshop subscription state, assembly identity, version, timestamp,
+  and SHA-256 before staging an update.
+- Install a verified update only after Data Center exits and activate it on the
+  next launch.
+- Support newer same-version compatibility payloads by tracking the applied
+  Workshop timestamp.
+- Add `AutoUpdateFromWorkshop`, enabled by default, to
+  `UserData/AutoClientSelector.cfg`.
+- Keep a persistent updater audit log and remove temporary updater files after
+  a successful update.
+
+### Changed
+
+- Describe IP matching in terms of Data Center's existing client-matching logic
+  without imposing undocumented network limitations.
+
 ## [0.1.6-rc.1] - 2026-08-08
 
 ### Added

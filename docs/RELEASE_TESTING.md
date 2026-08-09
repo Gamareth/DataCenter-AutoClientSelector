@@ -45,6 +45,22 @@ with the exact DLL intended for publication.
 - [ ] The selected client persists after saving and reloading.
 - [ ] No recurring exceptions appear in the MelonLoader log.
 
+## Workshop updater
+
+- [ ] `AutoClientSelector.cfg` is created with
+      `AutoUpdateFromWorkshop = true`.
+- [ ] Setting `AutoUpdateFromWorkshop = false` prevents the Workshop check.
+- [x] An older subscribed Workshop DLL is rejected without starting the updater.
+- [x] An identical Workshop payload records its timestamp without starting the
+      updater.
+- [x] A newer same-version Workshop payload is verified and staged.
+- [x] The staged payload replaces only `Mods/AutoClientSelector.dll` after Data
+      Center exits.
+- [x] The installed DLL SHA-256 matches the verified Workshop payload.
+- [x] The next launch reports success and removes the temporary updater files.
+- [x] `AutoClientSelectorUpdater.log` and the Workshop state file remain as
+      audit data.
+
 ## Co-op release gate
 
 Do not claim co-op support until these checks have passed with two players:
