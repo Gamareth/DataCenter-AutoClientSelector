@@ -1,46 +1,33 @@
-using HarmonyLib;
+using System.Net;
+using System.Net.Sockets;
 using Il2Cpp;
 using MelonLoader;
 
 namespace AutoClientSelector;
 
-internal readonly struct IpEditorState
-{
-    internal readonly Server Server;
-
-    internal IpEditorState(SetIP editor)
-    {
-        Server = editor?.server;
-    }
-}
-
 internal static class ClientSelector
 {
-    internal static void AfterIpEditorAction(
-        SetIP editor,
-        IpEditorState state)
+    internal static void Apply(Server server, string ip)
     {
-        var server = state.Server;
-        if (server is null || editor is null || editor.isActive)
-            return;
-
         try
         {
-            if (string.Equals(
-                    server.IP,
-                    "0.0.0.0",
-                    StringComparison.Ordinal))
+            if (server == null ||
+                !string.Equals(server.IP, ip, StringComparison.Ordinal) ||
+                !IPAddress.TryParse(ip, out var address) ||
+                address.AddressFamily != AddressFamily.InterNetwork)
             {
-                ClearClient(server);
                 return;
             }
 
-            SelectMatchingClient(server);
+            if (ip == "0.0.0.0")
+                ClearClient(server);
+            else
+                SelectMatchingClient(server, ip);
         }
         catch (Exception exception)
         {
             Melon<Mod>.Logger.Warning(
-                "Could not select a client after the server IP changed. " +
+                "Could not select a client after the server IP was set. " +
                 $"{exception.GetType().Name}: {exception.Message}");
         }
     }
@@ -63,16 +50,13 @@ internal static class ClientSelector
             "for 0.0.0.0.");
     }
 
-    private static void SelectMatchingClient(Server server)
+    private static void SelectMatchingClient(Server server, string ip)
     {
-        if (server is null || string.IsNullOrWhiteSpace(server.IP))
-            return;
-
         var matchingClientIds = new HashSet<int>();
         foreach (var customerBase in
                  UnityEngine.Object.FindObjectsOfType<CustomerBase>())
         {
-            if (customerBase is null || !customerBase.IsIPPresent(server.IP))
+            if (customerBase is null || !customerBase.IsIPPresent(ip))
                 continue;
             matchingClientIds.Add(customerBase.customerID);
         }
@@ -82,7 +66,7 @@ internal static class ClientSelector
         {
             Melon<Mod>.Logger.Msg(
                 $"Server {server.ServerID}: no matching client was found for " +
-                $"{server.IP}; current client {currentClientId} was left " +
+                $"{ip}; current client {currentClientId} was left " +
                 "unchanged.");
             return;
         }
@@ -94,7 +78,7 @@ internal static class ClientSelector
                 matchingClientIds.OrderBy(clientId => clientId));
             Melon<Mod>.Logger.Warning(
                 $"Server {server.ServerID}: multiple clients [{matches}] " +
-                $"matched {server.IP}; current client {currentClientId} was " +
+                $"matched {ip}; current client {currentClientId} was " +
                 "left unchanged.");
             return;
         }
@@ -104,7 +88,7 @@ internal static class ClientSelector
         {
             Melon<Mod>.Logger.Msg(
                 $"Server {server.ServerID}: client {matchingClientId} was " +
-                $"already selected for {server.IP}.");
+                $"already selected for {ip}.");
             return;
         }
 
@@ -114,20 +98,6 @@ internal static class ClientSelector
             matchingClientId);
         Melon<Mod>.Logger.Msg(
             $"Server {server.ServerID}: changed client from {currentClientId} " +
-            $"to {matchingClientId} for {server.IP}.");
-    }
-}
-
-[HarmonyPatch(typeof(SetIP), nameof(SetIP.ClickButtonOK))]
-internal static class ConfirmIpPatch
-{
-    private static void Prefix(SetIP __instance, out IpEditorState __state)
-    {
-        __state = new IpEditorState(__instance);
-    }
-
-    private static void Postfix(SetIP __instance, IpEditorState __state)
-    {
-        ClientSelector.AfterIpEditorAction(__instance, __state);
+            $"to {matchingClientId} for {ip}.");
     }
 }

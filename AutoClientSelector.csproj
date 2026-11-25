@@ -5,9 +5,9 @@
     <Nullable>disable</Nullable>
     <AssemblyName>AutoClientSelector</AssemblyName>
     <RootNamespace>AutoClientSelector</RootNamespace>
-    <Version>1.0.0</Version>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
+    <Version>1.0.1</Version>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+    <FileVersion>1.0.1.0</FileVersion>
     <PlatformTarget>x64</PlatformTarget>
     <DataCenterGamePath Condition="'$(DataCenterGamePath)' == ''">$(DATA_CENTER_GAME_PATH)</DataCenterGamePath>
     <MelonLoaderManagedPath>$(DataCenterGamePath)\MelonLoader\net6</MelonLoaderManagedPath>
@@ -23,6 +23,7 @@
     <Reference Include="Il2CppInterop.Runtime"><HintPath>$(MelonLoaderManagedPath)\Il2CppInterop.Runtime.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="Assembly-CSharp"><HintPath>$(Il2CppAssemblyPath)\Assembly-CSharp.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="UnityEngine.CoreModule"><HintPath>$(Il2CppAssemblyPath)\UnityEngine.CoreModule.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="Unity.Entities"><HintPath>$(Il2CppAssemblyPath)\Unity.Entities.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="Il2Cppmscorlib"><HintPath>$(Il2CppAssemblyPath)\Il2Cppmscorlib.dll</HintPath><Private>false</Private></Reference>
     <Reference Include="Il2Cppcom.rlabrecque.steamworks.net"><HintPath>$(Il2CppAssemblyPath)\Il2Cppcom.rlabrecque.steamworks.net.dll</HintPath><Private>false</Private></Reference>
   </ItemGroup>

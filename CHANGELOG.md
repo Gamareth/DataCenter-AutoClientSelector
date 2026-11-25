@@ -2,6 +2,15 @@
 
 All notable changes to Auto Client Selector are documented in this file.
 
+## [1.0.1] - 2026-11-25
+
+### Fixed
+
+- Detect IP assignments made through the game's server IP setter, including
+  assignments made by DHCP Mod without opening the IP editor.
+- Run client selection after the save finishes loading and only for servers
+  whose IP setter was called.
+
 ## [1.0.0] - 2026-08-09
 
 ### Added

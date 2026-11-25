@@ -12,7 +12,7 @@ namespace AutoClientSelector;
 public sealed class Mod : MelonMod
 {
     internal const string DisplayName = "Auto Client Selector";
-    internal const string Version = "1.0.0";
+    internal const string Version = "1.0.1";
     internal const string Author = "Gamareth";
 
     public override void OnInitializeMelon()
@@ -24,7 +24,7 @@ public sealed class Mod : MelonMod
             : "disabled";
         LoggerInstance.Msg(
             $"{DisplayName} {Version} initialized. " +
-            "Automatic selection runs after a valid server IP is confirmed; " +
+            "Automatic selection runs when a server IP is set; " +
             $"Workshop auto-update: {workshopUpdateState}.");
     }
 
@@ -41,5 +41,10 @@ public sealed class Mod : MelonMod
     public override void OnApplicationQuit()
     {
         WorkshopAutoUpdater.OnApplicationQuit();
+    }
+
+    public override void OnUpdate()
+    {
+        ServerIpUpdates.ProcessPending();
     }
 }

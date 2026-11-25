@@ -8,9 +8,11 @@ logic. If exactly one unique client matches, the mod updates the server to that
 client. If no client or multiple clients match, the existing client remains
 unchanged.
 
-Confirming `0.0.0.0` clears the current client assignment and client logo.
-Confirming an unchanged valid IP deliberately runs the selection again. An IP
-rejected by the game's editor does not trigger selection.
+After the save is loaded, selection runs for the affected server whenever
+Data Center's `Server.SetIP` method is called. This includes the game's IP
+editor and mods that use the same method, such as DHCP Mod. Setting
+`0.0.0.0` clears the current client assignment and logo. Confirming the same
+valid IP rechecks the current assignment when the game saves it again.
 
 The mod adds no buttons or shortcuts. Subscribed Workshop users receive
 verified automatic updates after the initial manual installation. Set

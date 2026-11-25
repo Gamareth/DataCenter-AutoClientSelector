@@ -9,7 +9,7 @@ with the exact DLL intended for publication.
 - [ ] Only one copy of `AutoClientSelector.dll` is present in `Mods`.
 - [ ] The MelonLoader log reports `Auto Client Selector` with the expected
       version and no patching errors.
-- [ ] The log reports that selection runs only after a confirmed IP-editor action.
+- [ ] The log reports that selection runs when a server IP is set.
 
 ## Required matching scenarios
 
@@ -28,6 +28,10 @@ with the exact DLL intended for publication.
 
 - [ ] Loading an existing save does not unexpectedly change server clients.
 - [ ] No automatic client-change messages appear while servers are reconstructed.
+- [ ] Assigning an IP with DHCP Mod triggers matching without opening the IP editor.
+- [ ] A DHCP assignment for a server with the correct client leaves that client selected.
+- [ ] Setting `0.0.0.0` via `Server.SetIP` clears the assigned client and logo.
+- [ ] Switching saves discards pending IP updates from the previous save.
 - [ ] Confirming an edited IP with the OK button triggers matching.
 - [ ] Confirming an unchanged valid IP with the OK button triggers matching.
 - [ ] A rejected invalid or duplicate IP leaves the editor open and does not
